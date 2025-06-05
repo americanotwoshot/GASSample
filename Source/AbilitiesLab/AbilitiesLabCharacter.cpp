@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 #include "Public/LabAbilitySystemComponent.h"
 #include "Public/LabHealthAttributeSet.h"
+#include "MyAbilitySlotsEnum.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -100,9 +101,18 @@ void AAbilitiesLabCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 		}
 		
 		// Bind GAS Actions
-		const FTopLevelAssetPath EnumName(TEXT("/Game/GAS/Enums/EMyAbilitySlotsEnum.EMyAbilitySlotsEnum"));
-		FGameplayAbilityInputBinds Binds(TEXT("ConfirmTargeting"), TEXT("CancelTargeting"), EnumName);
-		LabAbilitySystemComp->BindAbilityActivationToInputComponent(PlayerInputComponent, Binds);
+		// Bind Confirm Targeting & Cancel Targeting
+		EnhancedInputComponent->BindAction(IA_ConfirmTargeting, ETriggerEvent::Started, this, &AAbilitiesLabCharacter::ConfirmTargeting);
+		EnhancedInputComponent->BindAction(IA_CancelTargeting, ETriggerEvent::Started, this, &AAbilitiesLabCharacter::CancelTargeting);
+		
+		EnhancedInputComponent->BindAction(IA_PrimaryAbility, ETriggerEvent::Started, this, &AAbilitiesLabCharacter::UsePrimaryAbility);
+		EnhancedInputComponent->BindAction(IA_PrimaryAbility, ETriggerEvent::Completed, this, &AAbilitiesLabCharacter::ReleasePrimaryAbility);
+
+		EnhancedInputComponent->BindAction(IA_SecondaryAbility, ETriggerEvent::Started, this, &AAbilitiesLabCharacter::UseSecondaryAbility);
+		EnhancedInputComponent->BindAction(IA_SecondaryAbility, ETriggerEvent::Completed, this, &AAbilitiesLabCharacter::ReleaseSecondaryAbility);
+
+		EnhancedInputComponent->BindAction(IA_UltimateAbility, ETriggerEvent::Started, this, &AAbilitiesLabCharacter::UseUltimateAbility);
+		EnhancedInputComponent->BindAction(IA_UltimateAbility, ETriggerEvent::Completed, this, &AAbilitiesLabCharacter::ReleasePrimaryAbility);
 	}
 	else
 	{
@@ -123,6 +133,70 @@ void AAbilitiesLabCharacter::PossessedBy(AController* NewController)
 	if (LabAbilitySystemComp)
 	{
 		LabAbilitySystemComp->InitAbilityActorInfo(this, this);
+	}
+}
+
+void AAbilitiesLabCharacter::ConfirmTargeting(const FInputActionValue& Value)
+{
+	if (LabAbilitySystemComp)
+	{
+		LabAbilitySystemComp->TargetConfirm();
+	}
+}
+
+void AAbilitiesLabCharacter::CancelTargeting(const FInputActionValue& Value)
+{
+	if (LabAbilitySystemComp)
+	{
+		LabAbilitySystemComp->TargetCancel();
+	}
+}
+
+void AAbilitiesLabCharacter::UsePrimaryAbility(const FInputActionValue& Value)
+{
+	if (LabAbilitySystemComp)
+	{
+		LabAbilitySystemComp->AbilityLocalInputPressed((int32)EMyAbilitySlotsEnum::PrimaryAbility);
+	}
+}
+
+void AAbilitiesLabCharacter::ReleasePrimaryAbility(const FInputActionValue& Value)
+{
+	if (LabAbilitySystemComp)
+	{
+		LabAbilitySystemComp->AbilityLocalInputReleased((int32)EMyAbilitySlotsEnum::PrimaryAbility);
+	}
+}
+
+void AAbilitiesLabCharacter::UseSecondaryAbility(const FInputActionValue& Value)
+{
+	if (LabAbilitySystemComp)
+	{
+		LabAbilitySystemComp->AbilityLocalInputPressed((int32)EMyAbilitySlotsEnum::SecondaryAbility);
+	}
+}
+
+void AAbilitiesLabCharacter::ReleaseSecondaryAbility(const FInputActionValue& Value)
+{
+	if (LabAbilitySystemComp)
+	{
+		LabAbilitySystemComp->AbilityLocalInputReleased((int32)EMyAbilitySlotsEnum::SecondaryAbility);
+	}
+}
+
+void AAbilitiesLabCharacter::UseUltimateAbility(const FInputActionValue& Value)
+{
+	if (LabAbilitySystemComp)
+	{
+		LabAbilitySystemComp->AbilityLocalInputPressed((int32)EMyAbilitySlotsEnum::UltimateAbility);
+	}
+}
+
+void AAbilitiesLabCharacter::ReleaseUltimateAbility(const FInputActionValue& Value)
+{
+	if (LabAbilitySystemComp)
+	{
+		LabAbilitySystemComp->AbilityLocalInputReleased((int32)EMyAbilitySlotsEnum::UltimateAbility);
 	}
 }
 

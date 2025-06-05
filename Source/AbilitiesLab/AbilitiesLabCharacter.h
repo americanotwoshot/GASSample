@@ -78,6 +78,26 @@ private:
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* GASMappingContext;
+
+	/** Confirm Targeting Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* IA_ConfirmTargeting;
+    
+	/** Cancel Targeting Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* IA_CancelTargeting;
+	
+	/** Primary Ability Action */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* IA_PrimaryAbility;
+    
+    /** Secondary Ability Action */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* IA_SecondaryAbility;
+    
+    /** Ultimate Ability Action */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* IA_UltimateAbility;
 	
 protected:
 	// Ability System Component
@@ -87,5 +107,23 @@ protected:
 	// Attribute Set
 	UPROPERTY()
 	TObjectPtr<class ULabHealthAttributeSet> HealthSet;
+
+	// Called for confirm targeting
+	void ConfirmTargeting(const FInputActionValue& Value);
+
+	// Called for cancel targeting
+	void CancelTargeting(const FInputActionValue& Value);
+
+	// Called for use primary ability
+	void UsePrimaryAbility(const FInputActionValue& Value);
+	void ReleasePrimaryAbility(const FInputActionValue& Value);
+
+	// Called for use secondary ability
+	void UseSecondaryAbility(const FInputActionValue& Value);
+	void ReleaseSecondaryAbility(const FInputActionValue& Value);
+
+	// Called for use ultimate ability
+	void UseUltimateAbility(const FInputActionValue& Value);
+	void ReleaseUltimateAbility(const FInputActionValue& Value);
 };
 
